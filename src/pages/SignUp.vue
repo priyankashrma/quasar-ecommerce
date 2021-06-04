@@ -11,6 +11,7 @@
         <div class="col q-pt-lg q-px-md">
           <q-input
             v-model="firstname"
+            dense
             :rules="[ val => val && val.length > 0 || 'Please enter your first name']"
             bg-color="white"
             filled
@@ -23,6 +24,7 @@
         <div class="col q-pt-lg q-px-md">
           <q-input
             v-model="lastname"
+            dense
             bg-color="white"
             filled
             label="Last Name"
@@ -34,6 +36,7 @@
         <div class="col q-pt-lg q-px-md">
           <q-input
             v-model="email"
+            dense
             :rules="[ val => val && val.length > 0 || 'Please enter your email']"
             bg-color="white"
             filled
@@ -45,6 +48,7 @@
         <div class="col q-pt-lg q-px-md">
           <q-input
             v-model="phone"
+            dense
             :rules="[
           val => val !== null && val !== '' || 'Please type your number'
         ]"
@@ -60,6 +64,7 @@
 
           <q-input
             v-model="password"
+            dense
             :rules="[
                val => val !== null && val !== '' || 'Please create your password'
             ]"

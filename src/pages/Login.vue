@@ -17,6 +17,7 @@
             v-model="user.email"
             :rules="[ val => val && val.length > 0 || 'Please enter your email']"
             bg-color="white"
+            dense
             filled
             label="Email*"
             lazy-rules
@@ -33,6 +34,7 @@
             :type="isPwd ? 'password' : 'text'"
             bg-color="white"
             filled
+            dense
             label="Password"
             lazy-rules
             stack-label
