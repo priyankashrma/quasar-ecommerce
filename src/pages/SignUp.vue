@@ -1,12 +1,7 @@
 <template>
   <q-page-container>
     <q-page class="q-pa-lg q-pt-xl">
-
-      <q-form
-        @submit="onSubmit"
-        @reset="onReset"
-        class="q-gutter-md"
-      >
+      <div class="q-gutter-md">
         <div class="flex flex-center">
           <img src="http://assets.stickpng.com/images/580b57fcd9996e24bc43c53e.png"/>
         </div>
@@ -15,66 +10,65 @@
         </div>
         <div class="col q-pt-lg q-px-md">
           <q-input
-            filled
-            v-model="userDetails.firstName"
-            stack-label
-            label="First Name"
-            bg-color="white"
-            lazy-rules
+            v-model="firstname"
             :rules="[ val => val && val.length > 0 || 'Please enter your first name']"
+            bg-color="white"
+            filled
+            label="First Name"
+            lazy-rules
+            stack-label
           />
         </div>
 
         <div class="col q-pt-lg q-px-md">
           <q-input
+            v-model="lastname"
+            bg-color="white"
             filled
-            v-model="userDetails.lastName"
             label="Last Name"
-            bg-color="white"
-            stack-label
             lazy-rules
+            stack-label
           />
         </div>
 
         <div class="col q-pt-lg q-px-md">
           <q-input
-            filled
-            v-model="userDetails.email"
-            label="Email"
-            bg-color="white"
-            stack-label
-            lazy-rules
+            v-model="email"
             :rules="[ val => val && val.length > 0 || 'Please enter your email']"
+            bg-color="white"
+            filled
+            label="Email"
+            lazy-rules
+            stack-label
           />
         </div>
         <div class="col q-pt-lg q-px-md">
           <q-input
-            filled
-            type="number"
-            v-model="userDetails.phoneNumber"
-            label="Phone Number"
-            bg-color="white"
-            stack-label
-            lazy-rules
+            v-model="phone"
             :rules="[
-          val => val !== null && val !== '' || 'Please type your number',
-          val => val > 0 && val < 100 || 'Please type a correct number'
+          val => val !== null && val !== '' || 'Please type your number'
         ]"
+            bg-color="white"
+            filled
+            label="Phone Number"
+            lazy-rules
+            stack-label
+            type="number"
           />
         </div>
         <div class="col q-pt-lg q-px-md">
 
           <q-input
-            filled
-            v-model="userDetails.password"
-            label="Create Password"
-            bg-color="white"
-            stack-label
-            lazy-rules
-            :type="isPwd ? 'password' : 'text'"
+            v-model="password"
             :rules="[
-               val => val !== null && val !== '' || 'Please create you password'
+               val => val !== null && val !== '' || 'Please create your password'
             ]"
+            :type="isPwd ? 'password' : 'text'"
+            bg-color="white"
+            filled
+            label="Create Password"
+            lazy-rules
+            stack-label
           >
             <template v-slot:append>
               <q-icon
@@ -87,49 +81,69 @@
         </div>
         <div class="row  flex flex-center">
           <div class="col-md-5 col-sm-4">
-            <q-btn label="Sign Up" class="full-width q-pt-sm q-pb-sm" type="submit" color="primary"/>
+            <q-btn class="full-width q-pt-sm q-pb-sm" color="primary" label="Sign Up" type="submit"
+                   @click="register"/>
           </div>
         </div>
         <div class="flex flex-center">
           <span>Already have an account? <router-link to="/"><a>Login</a></router-link></span>
         </div>
-      </q-form>
+      </div>
 
     </q-page>
   </q-page-container>
 </template>
 
 <script>
-import axios from "axios"
+import firebase from 'firebase';
 
 export default {
   name: 'PageIndex',
   data() {
     return {
-      userDetails: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        phoneNumber: ""
-      }
+      email: '',
+      password: '',
+      phone: '',
+      firstname: '',
+      lastname: ''
     }
   },
   methods: {
-    registerUser() {
-      axios.post("https://vue-http-172eb-default-rtdb.firebaseio.com/data", this.userDetails, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json'
-        }
-      })
+    register: async function registerUser() {
+
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
         .then(response => {
-          this.userDetails.userId = response.data.id
-        });
+
+          const signupData = {
+            data: {
+              firstname: this.firstname,
+              lastname: this.lastname,
+              email: this.email,
+              phone: this.phone,
+
+            }
+          }
+          if (response) {
+
+            response.user.updateProfile({
+             signupData
+            }).then(
+              (s) => {
+                alert('User created')
+
+              }
+
+            )
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          alert('Oh no it looks like there was some problem creating account, please contact support or try again')
+        })
     }
-
   }
-
 }
 </script>
 

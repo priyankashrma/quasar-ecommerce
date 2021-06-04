@@ -3,8 +3,6 @@
     <q-page class="q-pa-lg q-pt-xl">
 
       <q-form
-        @submit="onSubmit"
-        @reset="onReset"
         class="q-gutter-md"
       >
         <div class="flex flex-center">
@@ -16,28 +14,28 @@
 
         <div class="col q-pt-lg q-px-md">
           <q-input
-            filled
-            v-model="userLogin.email"
-            label="Email*"
-            bg-color="white"
-            stack-label
-            lazy-rules
+            v-model="user.email"
             :rules="[ val => val && val.length > 0 || 'Please enter your email']"
+            bg-color="white"
+            filled
+            label="Email*"
+            lazy-rules
+            stack-label
           />
         </div>
 
         <div class="col q-pt-lg q-px-md">
           <q-input
-            filled
-            v-model="userLogin.password"
-            label="Password"
-            bg-color="white"
-            stack-label
-            lazy-rules
-            :type="isPwd ? 'password' : 'text'"
+            v-model="user.password"
             :rules="[
                val => val !== null && val !== '' || 'Please create you password'
             ]"
+            :type="isPwd ? 'password' : 'text'"
+            bg-color="white"
+            filled
+            label="Password"
+            lazy-rules
+            stack-label
           >
             <template v-slot:append>
               <q-icon
@@ -50,7 +48,7 @@
         </div>
         <div class="row  flex flex-center">
           <div class="col-md-5 col-sm-4">
-            <q-btn label="Sign Up" class="full-width q-pt-sm q-pb-sm" type="submit" color="primary"/>
+            <q-btn class="full-width q-pt-sm q-pb-sm" color="primary" label="Sign In" @click="login"/>
           </div>
         </div>
         <div class="flex flex-center">
@@ -63,19 +61,40 @@
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
   name: 'PageIndex',
   data() {
     return {
-      userLogin: {
+      loading: false,
+      user: {
+        id: "",
         email: "",
         password: ""
       },
-      isPwd:true
+      isPwd: true
 
     }
-  }
-}
+  },
+  methods: {
+    login: async function () {
+      this.loading = true
+      await
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(this.user.email, this.user.password)
+          .then(() => {
+            this.$router.push('/')
+          })
+          .catch(err => {
+            alert(
+              'An error has ocurred while login in. Check your user data.'
+            )
+            this.loading = false
+          })
+    }
+  }}
 </script>
 
 <style lang="sass">
