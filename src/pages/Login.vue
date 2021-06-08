@@ -1,12 +1,11 @@
 <template>
   <q-page-container>
     <q-page class="q-pa-lg q-pt-xl">
-
-      <q-form
-        class="q-gutter-md"
-      >
+      <q-form class="q-gutter-md">
         <div class="flex flex-center">
-          <img src="http://assets.stickpng.com/images/580b57fcd9996e24bc43c53e.png"/>
+          <img
+            src="http://assets.stickpng.com/images/580b57fcd9996e24bc43c53e.png"
+          />
         </div>
         <div class="flex flex-center">
           <p class="text-weight-medium text-h5">Welcome, Login Here</p>
@@ -15,7 +14,9 @@
         <div class="col q-pt-lg q-px-md">
           <q-input
             v-model="user.email"
-            :rules="[ val => val && val.length > 0 || 'Please enter your email']"
+            :rules="[
+              val => (val && val.length > 0) || 'Please enter your email'
+            ]"
             bg-color="white"
             dense
             filled
@@ -29,7 +30,8 @@
           <q-input
             v-model="user.password"
             :rules="[
-               val => val !== null && val !== '' || 'Please create you password'
+              val =>
+                (val !== null && val !== '') || 'Please create you password'
             ]"
             :type="isPwd ? 'password' : 'text'"
             bg-color="white"
@@ -50,53 +52,54 @@
         </div>
         <div class="row  flex flex-center">
           <div class="col-md-5 col-sm-4">
-            <q-btn class="full-width q-pt-sm q-pb-sm" color="primary" label="Sign In" @click="login"/>
+            <q-btn
+              class="full-width q-pt-sm q-pb-sm"
+              color="primary"
+              label="Sign In"
+              @click="login"
+            />
           </div>
         </div>
         <div class="flex flex-center">
-          <span>Don't have an account? <router-link to="/signup"><a>Sign Up</a></router-link></span>
+          <span
+            >Don't have an account?
+            <router-link to="/signup"><a>Sign Up</a></router-link></span
+          >
         </div>
       </q-form>
-
     </q-page>
   </q-page-container>
 </template>
 
 <script>
-import firebase from "firebase";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
-  name: 'PageIndex',
+  name: "PageIndex",
   data() {
     return {
       loading: false,
       user: {
-        id: "",
         email: "",
         password: ""
       },
       isPwd: true
-
-    }
+    };
+  },
+  computed: {
+    ...mapGetters(["isUserAuth"])
   },
   methods: {
-    login: async function () {
-      this.loading = true
-      await
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(this.user.email, this.user.password)
-          .then(() => {
-            this.$router.push('/')
-          })
-          .catch(err => {
-            alert(
-              'An error has ocurred while login in. Check your user data.'
-            )
-            this.loading = false
-          })
+    ...mapActions(["signInAction"]),
+    async login() {
+      console.log("here");
+      this.signInAction({
+        email: this.user.email,
+        password: this.user.password
+      });
     }
-  }}
+  }
+};
 </script>
 
 <style lang="sass">
@@ -115,7 +118,4 @@ img
 p
   text-align: center
   font-size: 16px
-
-
 </style>
-
