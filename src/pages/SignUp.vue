@@ -74,7 +74,7 @@
               val =>
                 (val !== null && val !== '') || 'Please create your password'
             ]"
-            :type="isPwd ? 'password' : 'text'"
+            :type="password ? 'password' : 'text'"
             bg-color="white"
             filled
             label="Create Password"
@@ -83,7 +83,7 @@
           >
             <template v-slot:append>
               <q-icon
-                :name="isPwd ? 'visibility_off' : 'visibility'"
+                :name="password ? 'visibility_off' : 'visibility'"
                 class="cursor-pointer"
                 @click="isPwd = !isPwd"
               />
@@ -97,7 +97,7 @@
               color="primary"
               label="Sign Up"
               type="submit"
-              @click="register"
+              @click="registerUser"
             />
           </div>
         </div>
@@ -127,7 +127,7 @@ export default {
     };
   },
   methods: {
-    register: async function registerUser() {
+    async registerUser() {
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)

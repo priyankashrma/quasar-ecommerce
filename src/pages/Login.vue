@@ -91,7 +91,8 @@ export default {
   },
   methods: {
     ...mapActions(["signInAction"]),
-    login: async function() {
+    async login() {
+      console.log("here");
       this.signInAction({
         email: this.user.email,
         password: this.user.password

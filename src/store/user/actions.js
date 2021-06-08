@@ -10,7 +10,7 @@ export function authAction({ commit }) {
   });
 }
 
-export function signInAction({ commit }) {
+export function signInAction({ commit }, payload) {
   firebase
     .auth()
     .signInWithEmailAndPassword(payload.email, payload.password)
