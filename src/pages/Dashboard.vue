@@ -16,7 +16,6 @@ export default {
   },
   methods: {
     beforeCreate() {
-      console.log(this.$store.user);
       if (!this.getUser) {
         this.$router.push({ name: "login" });
       }

@@ -100,8 +100,6 @@ export default {
     },
 
     beforeCreate() {
-      console.log("user", this.getUser);
-
       if (this.$store.user) this.$router.push({ path: "/" });
     }
   }
