@@ -87,16 +87,22 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isUserAuth"])
+    ...mapGetters("user", ["isUserAuth"])
   },
   methods: {
-    ...mapActions(["signInAction"]),
+    ...mapActions("user", ["signInAction"]),
     async login() {
-      console.log("here");
       this.signInAction({
         email: this.user.email,
         password: this.user.password
       });
+      this.$router.replace("/");
+    },
+
+    beforeCreate() {
+      console.log("user", this.getUser);
+
+      if (this.$store.user) this.$router.push({ path: "/" });
     }
   }
 };

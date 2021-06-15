@@ -74,7 +74,7 @@
               val =>
                 (val !== null && val !== '') || 'Please create your password'
             ]"
-            :type="password ? 'password' : 'text'"
+            :type="isPwd ? 'password' : 'text'"
             bg-color="white"
             filled
             label="Create Password"
@@ -83,7 +83,7 @@
           >
             <template v-slot:append>
               <q-icon
-                :name="password ? 'visibility_off' : 'visibility'"
+                :name="isPwd ? 'visibility_off' : 'visibility'"
                 class="cursor-pointer"
                 @click="isPwd = !isPwd"
               />
@@ -96,7 +96,6 @@
               class="full-width q-pt-sm q-pb-sm"
               color="primary"
               label="Sign Up"
-              type="submit"
               @click="registerUser"
             />
           </div>
@@ -113,7 +112,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "PageIndex",
@@ -123,39 +122,24 @@ export default {
       password: "",
       phone: "",
       firstname: "",
-      lastname: ""
+      lastname: "",
+      isPwd: true
     };
   },
+  computed: {
+    ...mapGetters("user", ["isUserAuth"])
+  },
   methods: {
+    ...mapActions("user", ["signUpAction"]),
     async registerUser() {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then(response => {
-          const signupData = {
-            data: {
-              firstname: this.firstname,
-              lastname: this.lastname,
-              email: this.email,
-              phone: this.phone
-            }
-          };
-          if (response) {
-            response.user
-              .updateProfile({
-                signupData
-              })
-              .then(s => {
-                alert("User created");
-              });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          alert(
-            "Oh no it looks like there was some problem creating account, please contact support or try again"
-          );
-        });
+      const signupData = {
+        firstname: this.firstname,
+        lastname: this.lastname,
+        email: this.email,
+        phone: this.phone,
+        password: this.password
+      };
+      this.signUpAction(signupData);
     }
   }
 };

@@ -1,29 +1,29 @@
 <template>
   <q-page-container>
-    <p>dsdsd</p>
+    <p>sasa</p>
     <q-btn @click="logout">Logout</q-btn>
   </q-page-container>
 </template>
 
 <script>
 import firebase from "firebase";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "LayoutDefault",
   computed: {
-    ...mapGetters(["getUser", "isUserAuth"])
+    ...mapGetters("user", ["getUser", "isUserAuth"])
   },
   methods: {
-    ...mapActions(["signOutAction"]),
+    beforeCreate() {
+      console.log(this.$store.user);
+      if (!this.getUser) {
+        this.$router.push({ name: "login" });
+      }
+    },
+    ...mapActions("user", ["signOutAction"]),
     logout() {
       this.signOutAction();
-    },
-
-    beforeCreate() {
-      firebase.auth().onAuthStateChanged(user => {
-        console.log("user", user);
-        if (!user) this.$router.push({ path: "login" });
-      });
     }
   }
 };
