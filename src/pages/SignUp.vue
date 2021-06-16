@@ -127,10 +127,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("user", ["isUserAuth"])
+    ...mapGetters(["isUserAuth"])
   },
   methods: {
-    ...mapActions("user", ["signUpAction"]),
+    ...mapActions(["signUpAction"]),
     async registerUser() {
       const signupData = {
         firstname: this.firstname,

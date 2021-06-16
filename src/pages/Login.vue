@@ -87,10 +87,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("user", ["isUserAuth"])
+    ...mapGetters(["isUserAuth"])
   },
   methods: {
-    ...mapActions("user", ["signInAction"]),
+    ...mapActions(["signInAction"]),
     async login() {
       this.signInAction({
         email: this.user.email,

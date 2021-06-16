@@ -12,7 +12,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "LayoutDefault",
   computed: {
-    ...mapGetters("user", ["getUser", "isUserAuth"])
+    ...mapGetters(["getUser", "isUserAuth"])
   },
   methods: {
     beforeCreate() {
@@ -20,7 +20,7 @@ export default {
         this.$router.push({ name: "login" });
       }
     },
-    ...mapActions("user", ["signOutAction"]),
+    ...mapActions(["signOutAction"]),
     logout() {
       this.signOutAction();
     }
