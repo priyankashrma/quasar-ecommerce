@@ -21,8 +21,7 @@ export default {
   methods: {
     ...mapActions(["getProductsAction"])
   },
-  beforeCreate() {
-    console.log("we are here");
+  created() {
     this.getProductsAction();
   },
   components: { Product }
