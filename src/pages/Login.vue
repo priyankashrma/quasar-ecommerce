@@ -92,11 +92,15 @@ export default {
   methods: {
     ...mapActions(["signInAction"]),
     async login() {
-      console.log("here");
       this.signInAction({
         email: this.user.email,
         password: this.user.password
       });
+      this.$router.replace("/");
+    },
+
+    beforeCreate() {
+      if (this.$store.user) this.$router.push({ path: "/" });
     }
   }
 };

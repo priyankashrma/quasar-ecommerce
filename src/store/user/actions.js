@@ -14,8 +14,10 @@ export function signInAction({ commit }, payload) {
   firebase
     .auth()
     .signInWithEmailAndPassword(payload.email, payload.password)
-    .then(() => {
-      this.$router.push("/");
+    .then(user => {
+      if (user) {
+        commit("setUser", user);
+      }
     })
     .catch(error => {
       commit("setError", error.message);
@@ -32,8 +34,9 @@ export function signUpAction({ commit }, payload) {
           .updateProfile({
             payload
           })
-          .then(s => {
-            commit("setUser", s);
+          .then(user => {
+            commit("setUser", user);
+            this.$router.push({ path: "/" });
           });
       }
     })

@@ -1,12 +1,13 @@
 <template>
   <q-page-container>
-    <p>dsdsd</p>
+    <p>sasa</p>
     <q-btn @click="logout">Logout</q-btn>
   </q-page-container>
 </template>
 
 <script>
 import firebase from "firebase";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "LayoutDefault",
@@ -14,16 +15,14 @@ export default {
     ...mapGetters(["getUser", "isUserAuth"])
   },
   methods: {
+    beforeCreate() {
+      if (!this.getUser) {
+        this.$router.push({ name: "login" });
+      }
+    },
     ...mapActions(["signOutAction"]),
     logout() {
       this.signOutAction();
-    },
-
-    beforeCreate() {
-      firebase.auth().onAuthStateChanged(user => {
-        console.log("user", user);
-        if (!user) this.$router.push({ path: "login" });
-      });
     }
   }
 };
